@@ -11,22 +11,15 @@ public class Venta {
     private int nroComprobante;
     private double total;
     private Cliente cliente;
-    private ArrayList<LineaDeVenta> lista = new ArrayList<>();
-    private Pago pago;
-//    private Factura factura;
-    private Empleado empleado;
+    private ArrayList<LineaDeVenta> lista = new ArrayList<>();    
 
-    public Venta(String fecha, int nroComprobante, double total, Cliente cliente, ArrayList<LineaDeVenta> lista, Pago pago, Empleado empleado) {
+    public Venta(String fecha, int nroComprobante, double total, Cliente cliente, ArrayList<LineaDeVenta> lista) {
         this.fecha = fecha;
         this.nroComprobante = nroComprobante;
         this.total = total;
         this.cliente = cliente;
         this.lista = lista;
-        this.pago = pago;
-//        this.factura = factura;
-        this.empleado = empleado;
     }
-
     public Venta() {
         
     }
@@ -71,30 +64,6 @@ public class Venta {
         this.lista = lista;
     }
 
-    public Pago getPago() {
-        return pago;
-    }
-
-    public void setPago(Pago pago) {
-        this.pago = pago;
-    }
-
-//    public Factura getFactura() {
-//        return factura;
-//    }
-//
-//    public void setFactura(Factura factura) {
-//        this.factura = factura;
-//    }
-
-    public Empleado getEmpleado() {
-        return empleado;
-    }
-
-    public void setEmpleado(Empleado empleado) {
-        this.empleado = empleado;
-    }
-
     @Override
     public String toString() {
         return "Venta{" +
@@ -103,28 +72,10 @@ public class Venta {
                 ", total=" + total +
                 ", cliente=" + cliente +
                 ", lista=" + lista +
-                ", pago=" + pago +
-                ", empleado=" + empleado +
                 '}';
     }
     
     public void agregarLinea(LineaDeVenta linea) {        
         lista.add(linea);
-    }
-
-    public void calcularTotal() {
-        
-        double total = 0;
-        for (int i = 0; i < lista.size();i++) {
-            total = total + lista.get(i).getProducto().getPrecioVenta();  
-        }
-        this.total = total;
-        
-    }
-    
-    public void nroComprobante(){
-        
-    }
-   
-    
+    }   
 }

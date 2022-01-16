@@ -5,20 +5,24 @@ public class Cliente {
     private String razonSocial;
     private String cuit;
     private String domicilio;
-    private CondTributaria condicion;
+    private String condicion;
 
-    public Cliente(String razonSocial, String cuit, String domicilio, CondTributaria condicion) {
+    public Cliente(String razonSocial, String cuit, String domicilio, String condicion) {
         this.razonSocial = razonSocial;
         this.cuit = cuit;
         this.domicilio = domicilio;
         this.condicion = condicion;
     }
 
-    public CondTributaria getCondicion() {
+    public Cliente() {
+        
+    }
+
+    public String getCondicion() {
         return condicion;
     }
 
-    public void setCondicion(CondTributaria condicion) {
+    public void setCondicion(String condicion) {
         this.condicion = condicion;
     }
 

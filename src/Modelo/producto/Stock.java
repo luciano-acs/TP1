@@ -5,33 +5,41 @@ import Modelo.venta.LineaDeVenta;
 
 public class Stock {
 
-    private Producto producto;
+//    private Producto producto;
+    private int id;
     private int cantidad;
-    private Talle talle;
-    private Color color;
-    private Rubro rubro;
+//    private Talle talle;
+//    private ColorP color;
     
 
-    public Stock(Producto producto, int cantidad, Talle talle, Color color, Rubro rubro) {
-        this.producto = producto;
+    public Stock(int id, int cantidad) {
+//        this.producto = producto;
+        this.id = id;
         this.cantidad = cantidad;
-        this.talle = talle;
-        this.color = color;
-        this.rubro = rubro;
+//        this.talle = talle;
+//        this.color = color;
     }
 
     public Stock() {
         
     }
 
-    public Producto getProducto() {
-        return producto;
+//    public Producto getProducto() {
+//        return producto;
+//    }
+//
+//    public void setProducto(Producto producto) {
+//        this.producto = producto;
+//    }
+
+    public int getId() {
+        return id;
     }
 
-    public void setProducto(Producto producto) {
-        this.producto = producto;
+    public void setId(int id) {
+        this.id = id;
     }
-
+    
     public int getCantidad() {
         return cantidad;
     }
@@ -40,38 +48,26 @@ public class Stock {
         this.cantidad = cantidad;
     }
 
-    public Talle getTalle() {
-        return talle;
-    }
-
-    public void setTalle(Talle talle) {
-        this.talle = talle;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public Rubro getRubro() {
-        return rubro;
-    }
-
-    public void setRubro(Rubro rubro) {
-        this.rubro = rubro;
-    }
+//    public Talle getTalle() {
+//        return talle;
+//    }
+//
+//    public void setTalle(Talle talle) {
+//        this.talle = talle;
+//    }
+//
+//    public ColorP getColor() {
+//        return color;
+//    }
+//
+//    public void setColor(ColorP color) {
+//        this.color = color;
+//    }
 
     @Override
     public String toString() {
         return "Stock{" +
-                "producto=" + producto +
                 ", cantidad=" + cantidad +
-                ", talle=" + talle +
-                ", color=" + color +
-                ", rubro=" + rubro +
                 '}';
     }
 
@@ -79,11 +75,11 @@ public class Stock {
         
         BD bd = new BD();
                
-        for(int i=0; i<bd.getStocks().size();i++){ 
-            if(bd.getStocks().get(i).getProducto().getCodigo() == codigo){
-                int nvaCantidad = bd.getStocks().get(i).getCantidad() - vendido;
-                bd.getStocks().get(i).setCantidad(nvaCantidad);                
-            }
-        }
+//        for(int i=0; i<bd.getStocks().size();i++){ 
+//            if(bd.getStocks().get(i).getProducto().getCodigo() == codigo){
+//                int nvaCantidad = bd.getStocks().get(i).getCantidad() - vendido;
+//                bd.getStocks().get(i).setCantidad(nvaCantidad);                
+//            }
+//        }
     }   
 }

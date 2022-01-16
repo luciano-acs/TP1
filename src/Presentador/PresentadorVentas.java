@@ -8,142 +8,239 @@ package Presentador;
 import Modelo.BD.BD;
 import Modelo.Organizacion.Empleado;
 import Modelo.cliente.Cliente;
-import Modelo.cliente.CondTributaria;
+import Modelo.producto.ColorP;
 import Modelo.producto.Producto;
-import Modelo.venta.FormaDePago;
+import Modelo.producto.Talle;
+import Modelo.producto.TipoDeTalle;
 import Modelo.venta.LineaDeVenta;
-import Modelo.venta.Pago;
 import Modelo.venta.Venta;
-import Vista.VistaVentas;
+import Vista.pVentas;
+import Vista.vistaMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Luciano Acosta
  */
-public class PresentadorVentas implements ActionListener{
+public class PresentadorVentas implements ActionListener, java.awt.event.ItemListener{
 
-    VistaVentas vistaVentas = new VistaVentas();
+    vistaMenu menu = new vistaMenu();
+    pVentas ventas = new pVentas();
     Venta v = new Venta();
     BD bd = new BD();
 
-    public PresentadorVentas(VistaVentas vista) {
-        this.vistaVentas = vista;
-        this.vistaVentas.jbAgregar.addActionListener(this);
-        this.vistaVentas.jbBuscar.addActionListener(this);
-        this.vistaVentas.jbImprimir.addActionListener(this);
-    }    
+    public PresentadorVentas(pVentas vista, vistaMenu menu) {
+        this.ventas = vista;
+        this.menu = menu;
+        ventas.btnBuscarCliente.addActionListener(this);
+        ventas.btnBuscarP.addActionListener(this);
+        ventas.btnConfirmar.addActionListener(this);
+        ventas.btnEliminar.addActionListener(this);
+        ventas.cbTipo.addItemListener(this);
+        ventas.btnCancelarVenta.addActionListener(this);
+        ventas.btnRegistarVenta.addActionListener(this);
+        ventas.btnFinalizarVenta.addActionListener(this);
+    }  
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==vistaVentas.jbAgregar){
-            agregarLinea();
+        if(e.getSource().equals(ventas.btnBuscarCliente)){
+            buscarCliente();
         }
-        if(e.getSource()==vistaVentas.jbBuscar){
-            buscarProductos();
+        if(e.getSource().equals(ventas.btnBuscarP)){
+            if(bd.existe(ventas.jtfNombre.getText())){
+                if(bd.consultarStock(ventas.jtfNombre.getText())>0){
+                    buscarProducto();
+                }else{
+                    JOptionPane.showMessageDialog(null, "Producto sin stock");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "El producto no exite");
+                ventas.jtfNombre.setText("");
+            }
+            
         }
-        if(e.getSource()==vistaVentas.jbImprimir){
+        if(e.getSource().equals(ventas.btnConfirmar)){
+            int codColor = bd.buscarCodColor((String) ventas.cbColor.getSelectedItem());
+            int codTalle = bd.buscarCodTalle((String) ventas.cbTalle.getSelectedItem());
+            if(Integer.parseInt(ventas.jtfCantidad.getText()) <= bd.consultarStock(ventas.jtfNombre.getText())){
+                if(bd.cantColor(ventas.jtfNombre.getText(),codColor) >= Integer.parseInt(ventas.jtfCantidad.getText()) &&
+                   bd.cantTalle(ventas.jtfNombre.getText(),codTalle) >= Integer.parseInt(ventas.jtfCantidad.getText())){
+                    
+                    String codigo = ventas.jtfNombre.getText();
+                    String descripcion = ventas.jtfDescripcion.getText();
+                    int cant = Integer.parseInt(ventas.jtfCantidad.getText());
+            
+                    Producto p = bd.buscarProducto(codigo);    
+                    Talle t = new Talle(bd.buscarCodTalle((String) ventas.cbTalle.getSelectedItem()),(String) ventas.cbTalle.getSelectedItem());
+                    ColorP co = new ColorP(bd.buscarCodColor((String) ventas.cbColor.getSelectedItem()),(String) ventas.cbColor.getSelectedItem());
+            
+                    double precio = p.calcularPrecio(p.getCosto(), p.getPorcIVA(), p.getMargenGanancia());;
+                    double subtotal = cant * precio;            
+            
+                    DefaultTableModel datos = (DefaultTableModel) ventas.jtLinea.getModel();        
+                    Object[] fila = {codigo,descripcion,cant,precio,subtotal,t.getIdTalle(),co.getIdColor()};                
+                    datos.addRow(fila); 
+            
+                    total();
+                    limpiar();
+                    bd.actualizarStock(Integer.parseInt(codigo),cant,Integer.parseInt(ventas.jtfID.getText()),t,co);                    
+                }else{
+                    JOptionPane.showMessageDialog(null, "Stock no disponible. Las "+ventas.jtfDescripcion.getText()+" en stock para dicho talle y color son: "+bd.cantColor(ventas.jtfNombre.getText(),codColor));
+                }                
+            }else{
+                JOptionPane.showMessageDialog(null, "Stock no disponible. Las "+ventas.jtfDescripcion.getText()+" en stock son: "+bd.consultarStock(ventas.jtfNombre.getText()));
+            }
+        }
+        if(e.getSource().equals(ventas.btnEliminar)){
+            DefaultTableModel datos = (DefaultTableModel) ventas.jtLinea.getModel();
+            int fila = ventas.jtLinea.getSelectedRow();
+            
+            String codigo = (String) ventas.jtLinea.getValueAt(fila, 0);
+            int cant = (int) ventas.jtLinea.getValueAt(fila, 2);
+            Talle t = new Talle((int) ventas.jtLinea.getValueAt(fila, 5),bd.buscarDTalle((int) ventas.jtLinea.getValueAt(fila, 5)));
+            ColorP co = new ColorP((int) ventas.jtLinea.getValueAt(fila, 6),bd.buscarDColor((int) ventas.jtLinea.getValueAt(fila, 6)));
+            
+            bd.restaurarStock(codigo,cant,t,co);            
+            
+            datos.removeRow(fila);
+            total();
+        }
+        if(e.getSource().equals(ventas.btnRegistarVenta)){
             cargarVenta();
         }
-    }  
-    
-
-    private void buscarProductos() {
-        ArrayList<Producto> productos = bd.getProductos();
-        int codigo = Integer.parseInt(vistaVentas.jtfCodigo.getText());
-        
-        if(productos.size()==0){
-            JOptionPane.showMessageDialog(null,"No hay productos cargados");
-        }else{
-            for(int i =0;i<productos.size();i++){
-            if(productos.get(i).getCodigo()==codigo){
-                vistaVentas.jtfDescrip.setText(productos.get(i).getDescripcion());
-                vistaVentas.jtfPrecio.setText(String.valueOf(productos.get(i).getPrecioVenta()));
-                vistaVentas.jtfMarca.setText(productos.get(i).getMarca().getMarcas());   
-            }else{
-                    System.out.println("HOLA");
-                    JOptionPane.showMessageDialog(null,"Producto Inexistente");
-                }
-            }
-        }
-        
-    }
-    
-    private void agregarLinea() {
-        DefaultTableModel datos = (DefaultTableModel) vistaVentas.jtDetalles.getModel();
-        datos.setNumRows(0);        
-        
-        ArrayList<Producto> lista = bd.getProductos();
-        int codigo = Integer.parseInt(vistaVentas.jtfCodigo.getText());
-        
-        if(lista.size()==0){
-            JOptionPane.showMessageDialog(null,"No hay productos cargados");
-        }else{
-            for(int i =0;i<lista.size();i++){
-            if(lista.get(i).getCodigo()==codigo){
-                Producto p = new Producto(lista.get(i).getCodigo(),
-                             lista.get(i).getDescripcion(),
-                             lista.get(i).getPrecioVenta(),
-                             lista.get(i).getPorcIVA(),                             
-                             lista.get(i).getCosto(),                             
-                             lista.get(i).getMargenGanancia(),
-                             lista.get(i).getMarca());
-                
-                LineaDeVenta lv = new LineaDeVenta(p,Integer.parseInt(vistaVentas.jtfCantidad.getText()));
-                v.agregarLinea(lv);
-                double subtotal = (Double.parseDouble(vistaVentas.jtfPrecio.getText()))*(Double.parseDouble(vistaVentas.jtfCantidad.getText()));
-                
-                Object[] fila = {lista.get(i).getCodigo(),
-                             lista.get(i).getDescripcion(),
-                             lista.get(i).getMarca(),
-                             lista.get(i).getPrecioVenta(),
-                             subtotal
-                };
+        if(e.getSource().equals(ventas.btnCancelarVenta)){
+            DefaultTableModel datos = (DefaultTableModel) ventas.jtLinea.getModel();
             
-                datos.addRow(fila);
-                total();
-                borrarjtf();
+            for(int i=0;i<datos.getRowCount();i++){
+                String codigo = (String) ventas.jtLinea.getValueAt(i, 0);
+                int cant = (int) ventas.jtLinea.getValueAt(i, 2);
+                Talle t = new Talle((int) ventas.jtLinea.getValueAt(i, 5),bd.buscarDTalle((int) ventas.jtLinea.getValueAt(i, 5)));
+                ColorP co = new ColorP((int) ventas.jtLinea.getValueAt(i, 6),bd.buscarDColor((int) ventas.jtLinea.getValueAt(i, 6)));
+            
+                bd.restaurarStock(codigo,cant,t,co);
             }
+            for(int i=0;i<datos.getRowCount();i++){
+                datos.removeRow(i);
             }
+            
+            limpiar();
+            total();
+            JOptionPane.showMessageDialog(null, "Venta cancelada");
+        }
+        if(e.getSource().equals(ventas.btnFinalizarVenta)){
+            
         }
     }
     
     private void total() {
-        if(vistaVentas.jtDetalles.getRowCount()>0){
-            for(int i=0;i<vistaVentas.jtDetalles.getRowCount();i++){
-                double st = Double.parseDouble(vistaVentas.jtDetalles.getValueAt(i, 3).toString());
-                double total =+ st;
-                vistaVentas.jtfTotal.setText(String.valueOf(total));
+        if(ventas.jtLinea.getRowCount()>0){
+            double sum = 0;
+            for(int i=0;i<ventas.jtLinea.getRowCount();i++){
+                sum += (double) ventas.jtLinea.getValueAt(i, 4);
+                ventas.jlTotal.setText(""+sum);
             }
-            
+        }else{
+            ventas.jlTotal.setText(""+0);
         }
     }
-    
+//    
     private void cargarVenta() {
-        String fecha = vistaVentas.lFecha.getText();
-        int comprobante = Integer.parseInt(vistaVentas.jtfVenta.getText());
-        double total = Double.parseDouble(vistaVentas.jtfTotal.getText());
-        Cliente cl = new Cliente("Luciano","2038243415","Rivadavia 1050",CondTributaria.Consumidor_Final);
-        String tipo = (String) vistaVentas.cbTipo.getSelectedItem();
-        Pago p = new Pago(Double.parseDouble(vistaVentas.jtfPago.getText()),FormaDePago.valueOf(tipo));
-        Empleado e = new Empleado(44444,"Nicolas","Acosta","lucianoacosta28@gmail.com","Usuario","123456");
+        String fecha = menu.jlFecha.getText();
+        int comprobante = Integer.parseInt(ventas.jtfID.getText());
+        double total = Double.parseDouble(ventas.jlTotal.getText());
+        Cliente cl = bd.buscarCliente(ventas.jtfCUIT.getText());
         
-        Venta ve = new Venta(fecha,comprobante,total,cl,v.getLista(),p,e);
-        bd.agregarVenta(ve);
-        borrarjtf();
+        ArrayList<LineaDeVenta> lista = new ArrayList<LineaDeVenta>();
+        DefaultTableModel datos = (DefaultTableModel) ventas.jtLinea.getModel();  
+        for(int i = 0;i<ventas.jtLinea.getRowCount();i++){
+            LineaDeVenta li = new LineaDeVenta();
+            li.setCantidad((int) datos.getValueAt(i, 2));
+            
+            Producto p = bd.buscarProducto(ventas.jtLinea.getValueAt(i, 0).toString());
+            li.setProducto(p);
+            lista.add(li);
+        }        
+        
+        Venta ve = new Venta(fecha,comprobante,total,cl,lista);
+        bd.registrarVenta(ve,Integer.parseInt(menu.jlPunto.getText()));
     }   
-    
-    private void borrarjtf() {
-        vistaVentas.jtfCliente.setText(null);
-        vistaVentas.jtfCodigo.setText(null);
-        vistaVentas.jtfDescrip.setText(null);
-        vistaVentas.jtfTotal.setText(null);
-        vistaVentas.jtfVenta.setText(null);
-        vistaVentas.jtfPrecio.setText(null);
-        vistaVentas.jtfCantidad.setText(null);
+
+    void cardarId(int sum) {
+        int cod = 1+sum;
+        
+        Calendar fecha = new GregorianCalendar();
+        int dia = fecha.get(Calendar.DAY_OF_MONTH);
+        int mes = fecha.get(Calendar.MONTH);
+        int anio = fecha.get(Calendar.YEAR);
+        
+        String cadena = dia+""+(mes+1)+""+anio+""+cod+"";
+        
+        System.out.println(cadena);
+        String idVenta = cadena;
+        ventas.jtfID.setHorizontalAlignment(SwingConstants.CENTER);
+        ventas.jtfID.setText(idVenta);
+        ventas.jtfID.setEnabled(false);
+    }
+
+    private void buscarCliente() {
+        String cuit = ventas.jtfCUIT.getText();
+        Cliente c = bd.buscarCliente(cuit);
+        
+        ventas.jtfRazonSocial.setText(c.getRazonSocial());
+    }
+
+    private void buscarProducto() {
+        int cod = Integer.parseInt(ventas.jtfNombre.getText());
+        Producto p = bd.listarProducto(cod);
+
+        ventas.jtfDescripcion.setText(p.getDescripcion());
+        ventas.jtfMarca.setText(p.getMarca().getDescripcionM());
+        ventas.cbColor.removeAllItems();;
+        ventas.cbTipo.removeAllItems();
+        ventas.cbTalle.removeAllItems();
+        
+        ArrayList<TipoDeTalle> tipo = bd.listarStockTipoTalle(cod);
+        ArrayList<Modelo.producto.ColorP> color = bd.listarStockColor(cod);
+        
+        for(int i =0;i<tipo.size();i++){
+            ventas.cbTipo.addItem(tipo.get(i).getDescripcion());
+        }
+        for(int i =0;i<color.size();i++){
+            ventas.cbColor.addItem(color.get(i).getDescripcion());
+        }
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if(e.getStateChange()==ItemEvent.SELECTED){
+            ventas.cbTalle.removeAllItems();
+            if(ventas.cbTipo.getSelectedIndex()>-1){
+                int cod = bd.buscarCodTipo(ventas.cbTipo.getSelectedItem().toString());        
+                ArrayList<Talle> talle =  bd.buscarStockTalle(cod,ventas.cbTipo.getSelectedItem().toString());
+                for(int i =0;i<talle.size();i++){
+                    ventas.cbTalle.addItem(talle.get(i).getDescripcion());            
+                }
+            }
+        }
+    }
+
+    //limpiar jtf venta
+    private void limpiar() {
+        ventas.jtfCantidad.setText("");
+        ventas.jtfMarca.setText("");
+        ventas.jtfDescripcion.setText("");
+        ventas.jtfNombre.setText("");
+        ventas.cbColor.removeAllItems();
+        ventas.cbTipo.removeAllItems();
+        ventas.cbTalle.removeAllItems();
     }
 }

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>WS-Addressing 1.0 Namespace</title>
+    <link type="text/css" rel="stylesheet" href="/StyleSheets/TR/base.css"/>
+  </head>
+
+  <body>
+
+    <div class="head">
+      <p>
+	<a href="http://www.w3.org/">
+	  <img width="72" height="48" alt="W3C" src="http://www.w3.org/Icons/w3c_home"/>
+	</a>
+      </p>
+
+      <h1>WS-Addressing 1.0 Namespace: <code>http://www.w3.org/2005/08/addressing</code></h1>
+    </div>
+
+    <p>This (<code>http://www.w3.org/2005/08/addressing</code>) is a URI defined in the
+
+    <a href="http://www.w3.org/TR/2006/REC-ws-addr-core-20060509/">Web
+    Services Addressing 1.0 - Core</a>
+
+    and
+
+    <a href="http://www.w3.org/TR/2006/REC-ws-addr-soap-20060509/">Web
+    Services Addressing 1.0 - SOAP Binding</a>
+
+    2006-05-09 specifications.</p>
+
+    <p>This document describes the WS-Addressing 1.0 namespace. A <a
+    href='ws-addr.xhtml'>RDDL version</a> of this document is
+    available.</p>
+
+    <h2>Latest XML Schema:</h2>
+
+    <p>The following URI always points to the latest schema
+    (including errata) for the WS-Addressing 1.0 namespace.  The resource at this location may change as new errata are incorporated.</p>
+      <p>
+	<a title="Latest WS-Addressing 1.0 schema document"
+	    href="http://www.w3.org/2002/ws/addr/ns/ws-addr">http://www.w3.org/2002/ws/addr/ns/ws-addr</a>
+      </p>
+
+    <h2>This dated version of the XML Schema:</h2>
+
+    <p>The following URI points to the schema for the WS-Addressing 1.0 namespace
+    corresponding to the 2006-05-09 specifications.</p>
+
+      <p>
+	<a title="2006-05-09 WS-Addressing 1.0 schema document"
+	   href="http://www.w3.org/2006/03/addressing/ws-addr.xsd">http://www.w3.org/2006/03/addressing/ws-addr.xsd</a>
+      </p>
+
+    <h2>Stability of this namespace URI:</h2>
+
+    <p>This namespace URI (<code>http://www.w3.org/2005/08/addressing</code>) is defined in a <a
+    href="http://www.w3.org/2005/10/Process-20051014/tr.html#RecsW3C">W3C
+    Recommendation</a> and is stable.</p>
+
+    <hr/>
+    <p>Comments on this document may be sent to the public <a href="mailto:public-ws-addressing-comments@w3.org">public-ws-addressing-comments@w3.org</a> mailing list (<a href="http://lists.w3.org/Archives/Public/public-ws-addressing-comments/">public
+    archive</a>).
+    </p>
+  </body>
+</html>

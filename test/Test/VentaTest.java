@@ -4,7 +4,7 @@ import Modelo.BD.BD;
 import Modelo.Organizacion.Empleado;
 import Modelo.cliente.Cliente;
 import Modelo.cliente.CondTributaria;
-import Modelo.producto.Color;
+import Modelo.producto.ColorP;
 import Modelo.producto.Marca;
 import Modelo.producto.Producto;
 import Modelo.producto.Rubro;
@@ -53,7 +53,7 @@ public class VentaTest {
         Producto producto = new Producto();
 
         Producto producto1 = new Producto(1,"Remera",producto.calcularPrecio(500,0.21,0.2),0.21,500,0.2,Marca.Adidas);
-        Stock stock = new Stock(producto1,150,Talle.S,Color.AZUL,Rubro.MUJER);
+        Stock stock = new Stock(producto1,150,Talle.S,ColorP.AZUL,Rubro.MUJER);
         BD bd = new BD();
         bd.agregarStock(stock);
         int codigo = 1;

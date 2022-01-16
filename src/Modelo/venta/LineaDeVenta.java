@@ -10,6 +10,10 @@ public class LineaDeVenta {
         this.cantidad = cantidad;
     }
 
+    public LineaDeVenta() {
+        
+    }
+
     public Producto getProducto() {
         return producto;
     }

@@ -4,26 +4,49 @@ public class Producto {
 
     private int codigo;
     private String descripcion;
-    private double precioVenta;
     private double porcIVA;
     private double costo;
     private double margenGanancia;
     private Marca marca;
-
-    public Producto(int codigo, String descripcion, double precioVenta, double porcIVA, double costo, double margenGanancia, Marca marca) {
+    private Rubro rubro;
+    private Stock stock;
+    private int visible;
+    
+    public Producto(int codigo, String descripcion, double porcIVA, double costo, double margenGanancia, Marca marca, Rubro rubro, Stock stock, int visible) {
         this.codigo = codigo;
         this.descripcion = descripcion;
-        this.precioVenta = precioVenta;
         this.porcIVA = porcIVA;
         this.costo = costo;
         this.margenGanancia = margenGanancia;
         this.marca = marca;
+        this.rubro = rubro;
+        this.stock = stock;
+        this.visible = visible;
     }
     
     public Producto(){
         
     }
 
+    public Producto(int codigo, String descripcion, double iva, double costo, double margen, Marca m, Rubro r, int visible) {
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.porcIVA = iva;
+        this.costo = costo;
+        this.margenGanancia = margen;
+        this.marca = m;
+        this.rubro = r;
+        this.visible = visible;
+    }
+
+    public int isVisible() {
+        return visible;
+    }
+
+    public void setVisible(int visible) {
+        this.visible = visible;
+    }
+    
     public Marca getMarca() {
         return marca;
     }
@@ -48,14 +71,6 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public double getPrecioVenta() {
-        return precioVenta;
-    }
-
-    public void setPrecioVenta(double precioVenta) {
-        this.precioVenta = precioVenta;
-    }
-
     public double getPorcIVA() {
         return porcIVA;
     }
@@ -78,12 +93,21 @@ public class Producto {
 
     public void setMargenGanancia(double margenGanancia) {
         this.margenGanancia = margenGanancia;
+    } 
+
+    public Rubro getRubro() {
+        return rubro;
+    }
+
+    public void setRubro(Rubro rubro) {
+        this.rubro = rubro;
     }
 
     @Override
     public String toString() {
-        return "Producto{" + "codigo=" + codigo + ", descripcion=" + descripcion + ", precioVenta=" + precioVenta + ", porcIVA=" + porcIVA + ", costo=" + costo + ", margenGanancia=" + margenGanancia + ", marca=" + marca + '}';
-    }   
+        return "Producto{" + "codigo=" + codigo + ", descripcion=" + descripcion + ", porcIVA=" + porcIVA + ", costo=" + costo + ", margenGanancia=" + margenGanancia + ", marca=" + marca + ", rubro=" + rubro + '}';
+    }
+      
     
     public double calcularPrecio(double costo, double porcIVA, double margen) {
         
@@ -91,5 +115,13 @@ public class Producto {
         double iva = neto * 0.21;
         double precio = neto + iva;
         return precio;        
-    }     
+    }  
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
+    }
 }

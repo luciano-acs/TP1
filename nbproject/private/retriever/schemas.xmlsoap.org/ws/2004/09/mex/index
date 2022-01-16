@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- TOOLBAR_EXEMPT --><HTML lang=en xml:lang="en" 
+xmlns="http://www.w3.org/1999/xhtml" xmlns:xlink = 
+"http://www.w3.org/1999/xlink" xmlns:rddl = "http://www.rddl.org/"><HEAD><TITLE>
+Web Services Metadata Exchange (WS-MetadataExchange)</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252"><link href="http://www.rddl.org/xrd.css" type="text/css" rel="stylesheet" />
+</head><META content="MSHTML 6.00.2900.2802" name=GENERATOR>
+<meta name="Author" content="Asir S Vedamuthu">
+</HEAD>
+<BODY>
+<H1>Web Services Metadata Exchange (WS-MetadataExchange)</H1>
+<P>August 2006</P>
+<H2>Introduction</H2>
+<P>This document is a directory of links to resources related to the 
+WS-MetadataExchange specification.</P><hr>
+<h1>Published August 2006</h1>
+<p>Note: the namespaces have not changed in the August 2006 publication as they 
+are backwards compatible with the September 2004 publication.</p>
+<H2>XML Schema for WS-MetadataExchange:</H2><rddl:resource 
+id="WS-MetadataExchange-Schema" xlink:actuate="none" xlink:show="none" xlink:type="simple" 
+xlink:href="MetadataExchange.xsd" 
+xlink:arcrole="http://www.rddl.org/purposes#schema-validation" 
+xlink:role="http://www.w3.org/2001/XMLSchema" 
+xlink:title="WS-MetadataExchange Schema Document">
+<P><a href="http://schemas.xmlsoap.org/ws/2004/09/mex/MetadataExchange.xsd">
+http://schemas.xmlsoap.org/ws/2004/09/mex/MetadataExchange.xsd</a></P></rddl:resource>
+<H2>WSDL for WS-MetadataExchange:</H2>
+<rddl:resource 
+id="WS-MetadataExchange-WSDL" xlink:actuate="none" xlink:show="none" xlink:type="simple" 
+xlink:href="MetadataExchange.wsdl" 
+xlink:arcrole="http://www.w3.org/TR/wsdl" 
+xlink:role="http://schemas.xmlsoap.org/wsdl/" 
+xlink:title="WS-MetadataExchange WSDL Document">
+<P><a href="http://schemas.xmlsoap.org/ws/2004/09/mex/MetadataExchange.wsdl">
+http://schemas.xmlsoap.org/ws/2004/09/mex/MetadataExchange.wsdl</a></P></rddl:resource>
+<H2>Specification:</H2>
+<P><a href="http://specs.xmlsoap.org/ws/2004/09/mex/WS-MetadataExchange.pdf">The 
+WS-MetadataExchange specification version 1.1</a></P>
+<p>The WS-MetadataExchange specification was submitted to W3C in September 2008. 
+Links to this specification at W3C are:</p>
+<p><a href="http://www.w3.org/Submission/2008/SUBM-WS-MetadataExchange-20080813/">
+http:http://www.w3.org/Submission/2008/SUBM-WS-MetadataExchange-20080813/</a></p><br>
+&nbsp;</p><hr>
+<h1>Superseded Versions</h1>
+<h1>Published September 2004</h1>
+<H2>XML Schema for WS-MetadataExchange:</H2><rddl:resource 
+id="WS-MetadataExchange-Schema-0904" xlink:actuate="none" xlink:show="none" xlink:type="simple" 
+xlink:href="MetadataExchange.xsd" 
+xlink:arcrole="http://www.rddl.org/purposes#schema-validation" 
+xlink:role="http://www.w3.org/2001/XMLSchema" 
+xlink:title="WS-MetadataExchange Schema Document">
+<P><a href="http://schemas.xmlsoap.org/ws/2004/09/mex/MetadataExchange0904.xsd">
+http://schemas.xmlsoap.org/ws/2004/09/mex/MetadataExchange0904.xsd</a></P></rddl:resource>
+<H2>WSDL for WS-MetadataExchange:</H2>
+<rddl:resource 
+id="WS-MetadataExchange-WSDL-0904" xlink:actuate="none" xlink:show="none" xlink:type="simple" 
+xlink:href="MetadataExchange.wsdl" 
+xlink:arcrole="http://www.w3.org/TR/wsdl" 
+xlink:role="http://schemas.xmlsoap.org/wsdl/" 
+xlink:title="WS-MetadataExchange WSDL Document">
+<P><a href="http://schemas.xmlsoap.org/ws/2004/09/mex/MetadataExchange0904.wsdl">
+http://schemas.xmlsoap.org/ws/2004/09/mex/MetadataExchange0904.wsdl</a></P></rddl:resource>
+<H2>Specification:</H2>
+<P><a href="http://specs.xmlsoap.org/ws/2004/09/mex/WS-MetadataExchange0904.pdf">The 
+WS-MetadataExchange specification published September 2004</a></P>
+</BODY></HTML>

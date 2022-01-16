@@ -18,6 +18,4 @@ public enum FormaDePago {
     public void setFdp(String fdp) {
         this.fdp = fdp;
     }
-    
-    
 }
