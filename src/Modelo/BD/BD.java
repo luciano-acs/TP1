@@ -9,6 +9,7 @@ import Modelo.producto.Rubro;
 import Modelo.producto.Stock;
 import Modelo.producto.Talle;
 import Modelo.producto.TipoDeTalle;
+import Modelo.venta.FormaDePago;
 import Modelo.venta.LineaDeVenta;
 import Modelo.venta.Venta;
 
@@ -349,6 +350,29 @@ public class BD {
         return p;
     }
     
+    
+
+    public ArrayList<FormaDePago> listarFormas() {
+        ArrayList<FormaDePago> formas = new ArrayList<FormaDePago>();
+        try {
+          Connection c = getConnection();
+          Statement s = c.createStatement();
+          String sql = "select idForma, descripcion from formadepago";
+          ResultSet r = s.executeQuery(sql);
+                  
+          while(r.next()){
+              FormaDePago forma = new FormaDePago();
+              forma.setIdForma(r.getInt("idForma"));
+              forma.setDescripcion(r.getString("descripcion"));
+              
+              formas.add(forma);
+          }          
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return formas;
+    }
+    
     public String buscarDMarca(int marca) {
         String descripcion = "";
         try {
@@ -576,7 +600,7 @@ public class BD {
 
     public void registrarVenta(Venta v, int pto) {
         try{
-            String cadena1 = "insert into venta values (%1,'%2',%3,%4,%5)"
+            String cadena1 = "insert into venta values (%1,STR_TO_DATE(REPLACE('%2','/','.') ,GET_FORMAT(date,'EUR')),%3,%4,%5)"
             .replace("%1",""+v.getNroComprobante())
             .replace("%2",v.getFecha())
             .replace("%3",""+v.getTotal())
@@ -706,7 +730,7 @@ public class BD {
         return cantidad;
     }
 
-    public void restaurarStock(String codigo, int cant, Talle t, ColorP co) {
+    public void restaurarStock(String codigo, int cant, Talle t, ColorP co, int linea) {
         try{
             String cadena1 = "update stock as a INNER JOIN producto as b set a.cantidad = a.cantidad + %1 where a.idStock = b.Stock_idStock and b.codProducto = %2"
             .replace("%1",""+cant)
@@ -721,11 +745,14 @@ public class BD {
                              .replace("%1",""+cant)
                              .replace("%2",""+codigo)
                              .replace("%3",""+co.getIdColor());
-                
+            
+            String cadena4 = "delete from lineadeventa where Venta_idVenta = %1".replace("%1",""+linea);
+            
             Connection c = getConnection();
             c.createStatement().executeUpdate(cadena1);   
             c.createStatement().executeUpdate(cadena2); 
-            c.createStatement().executeUpdate(cadena3);                                    
+            c.createStatement().executeUpdate(cadena3);    
+            c.createStatement().executeUpdate(cadena4);
         }
         catch(Exception e){
             e.printStackTrace();

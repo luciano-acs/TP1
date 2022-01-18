@@ -1,21 +1,34 @@
 package Modelo.venta;
 
-public enum FormaDePago {
-
-    EFECTIVO("EFECTIVO"),
-    TARJERA("TARJETA");
+public class FormaDePago {
     
-    private String fdp;
+    private int idForma;
+    private String descripcion;
 
-    private FormaDePago(String fdp) {
-        this.fdp = fdp;
+    public FormaDePago() {
+        
     }
+
+    public int getIdForma() {
+        return idForma;
+    }
+
+    public void setIdForma(int idForma) {
+        this.idForma = idForma;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public FormaDePago(int idForma, String descripcion) {
+        this.idForma = idForma;
+        this.descripcion = descripcion;
+    }
+
     
-    public String getFdp() {
-        return fdp;
-    }
-
-    public void setFdp(String fdp) {
-        this.fdp = fdp;
-    }
 }

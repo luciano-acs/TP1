@@ -5,6 +5,7 @@
 package Presentador;
 
 import Modelo.BD.BD;
+import Modelo.venta.Venta;
 import Vista.Sesion;
 import Vista.pProductos;
 import Vista.pVentas;
@@ -18,12 +19,13 @@ import java.awt.event.ActionListener;
 public class Principal{
     
     public static void main(String[] args) {        
-//        Sesion inicio = new Sesion();
-//        PresentadorInicio iniciar = new PresentadorInicio(inicio);
+        Sesion inicio = new Sesion();
+        PresentadorInicio iniciar = new PresentadorInicio(inicio);
 //        BD bd = new BD();
 //        
 //        System.out.println(bd.ultimoCod());
         //http://istp1service.azurewebsites.net/LoginService.svc?wsdl
         //https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL
+        
     }
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
     <nextCatalog catalog="nbproject/private/retriever/catalog.xml"/>
+    <system systemId="https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL" uri="xml-resources/web-service-references/service/wsdl/wswhomo.afip.gov.ar/wsfev1/service.asmx.wsdl"/>
     <system systemId="http://istp1service.azurewebsites.net/LoginService.svc?wsdl" uri="xml-resources/web-service-references/LoginService/wsdl/istp1service.azurewebsites.net/LoginService.svc.wsdl"/>
     <system systemId="http://istp1service.azurewebsites.net/LoginService.svc?wsdl=wsdl0" uri="xml-resources/web-service-references/LoginService/wsdl/istp1service.azurewebsites.net/LoginService.svc.wsdl_wsdl0.wsdl"/>
     <system systemId="http://istp1service.azurewebsites.net/LoginService.svc?xsd=xsd0" uri="xml-resources/web-service-references/LoginService/wsdl/istp1service.azurewebsites.net/LoginService.svc.xsd_xsd0.xsd"/>
     <system systemId="http://istp1service.azurewebsites.net/LoginService.svc?xsd=xsd1" uri="xml-resources/web-service-references/LoginService/wsdl/istp1service.azurewebsites.net/LoginService.svc.xsd_xsd1.xsd"/>
     <system systemId="http://istp1service.azurewebsites.net/LoginService.svc?xsd=xsd2" uri="xml-resources/web-service-references/LoginService/wsdl/istp1service.azurewebsites.net/LoginService.svc.xsd_xsd2.xsd"/>
-    <system systemId="https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL" uri="xml-resources/web-service-references/service/wsdl/wswhomo.afip.gov.ar/wsfev1/service.asmx.wsdl"/>
 </catalog>

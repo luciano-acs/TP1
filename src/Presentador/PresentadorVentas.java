@@ -12,10 +12,12 @@ import Modelo.producto.ColorP;
 import Modelo.producto.Producto;
 import Modelo.producto.Talle;
 import Modelo.producto.TipoDeTalle;
+import Modelo.venta.FormaDePago;
 import Modelo.venta.LineaDeVenta;
 import Modelo.venta.Venta;
 import Vista.pVentas;
 import Vista.vistaMenu;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -40,14 +42,22 @@ public class PresentadorVentas implements ActionListener, java.awt.event.ItemLis
     public PresentadorVentas(pVentas vista, vistaMenu menu) {
         this.ventas = vista;
         this.menu = menu;
+        
         ventas.btnBuscarCliente.addActionListener(this);
         ventas.btnBuscarP.addActionListener(this);
         ventas.btnConfirmar.addActionListener(this);
         ventas.btnEliminar.addActionListener(this);
         ventas.cbTipo.addItemListener(this);
+        ventas.cbPago.addItemListener(this);
         ventas.btnCancelarVenta.addActionListener(this);
         ventas.btnRegistarVenta.addActionListener(this);
         ventas.btnFinalizarVenta.addActionListener(this);
+        
+        ventas.jtfMonto.setEnabled(false);
+        ventas.cbPago.setEnabled(true);
+        ventas.jtfCVV.setEnabled(false);
+        ventas.jtfTarjeta.setEnabled(false);
+        ventas.jtfVto.setEnabled(false);
     }  
     
     @Override
@@ -57,7 +67,7 @@ public class PresentadorVentas implements ActionListener, java.awt.event.ItemLis
         }
         if(e.getSource().equals(ventas.btnBuscarP)){
             if(bd.existe(ventas.jtfNombre.getText())){
-                if(bd.consultarStock(ventas.jtfNombre.getText())>0){
+                if(bd.consultarStock(ventas.jtfNombre.getText()) > 0){
                     buscarProducto();
                 }else{
                     JOptionPane.showMessageDialog(null, "Producto sin stock");
@@ -66,7 +76,6 @@ public class PresentadorVentas implements ActionListener, java.awt.event.ItemLis
                 JOptionPane.showMessageDialog(null, "El producto no exite");
                 ventas.jtfNombre.setText("");
             }
-            
         }
         if(e.getSource().equals(ventas.btnConfirmar)){
             int codColor = bd.buscarCodColor((String) ventas.cbColor.getSelectedItem());
@@ -103,22 +112,42 @@ public class PresentadorVentas implements ActionListener, java.awt.event.ItemLis
         if(e.getSource().equals(ventas.btnEliminar)){
             DefaultTableModel datos = (DefaultTableModel) ventas.jtLinea.getModel();
             int fila = ventas.jtLinea.getSelectedRow();
+            int linea = Integer.parseInt(ventas.jtfID.getText());
             
             String codigo = (String) ventas.jtLinea.getValueAt(fila, 0);
             int cant = (int) ventas.jtLinea.getValueAt(fila, 2);
             Talle t = new Talle((int) ventas.jtLinea.getValueAt(fila, 5),bd.buscarDTalle((int) ventas.jtLinea.getValueAt(fila, 5)));
             ColorP co = new ColorP((int) ventas.jtLinea.getValueAt(fila, 6),bd.buscarDColor((int) ventas.jtLinea.getValueAt(fila, 6)));
             
-            bd.restaurarStock(codigo,cant,t,co);            
+            bd.restaurarStock(codigo,cant,t,co,linea);            
             
             datos.removeRow(fila);
             total();
         }
         if(e.getSource().equals(ventas.btnRegistarVenta)){
             cargarVenta();
+            
+            
+            ventas.jtfMonto.setText(ventas.jlTotal.getText());
+            limpiar();
+            DefaultTableModel datos = (DefaultTableModel) ventas.jtLinea.getModel();
+            datos.setRowCount(0);
+            for(int i=0;i<datos.getRowCount();i++){
+                datos.removeRow(i);
+            }
+            
+            JOptionPane.showMessageDialog(null,"Venta registrada");
+            ventas.jtfMonto.setEnabled(true);
+            ventas.cbPago.setEnabled(true);
+            
+            ArrayList<FormaDePago> formas = bd.listarFormas();
+            for(int i = 0;i<formas.size();i++){
+                ventas.cbPago.addItem(formas.get(i).getDescripcion());
+            }
         }
         if(e.getSource().equals(ventas.btnCancelarVenta)){
             DefaultTableModel datos = (DefaultTableModel) ventas.jtLinea.getModel();
+            int linea = Integer.parseInt(ventas.jtfID.getText());
             
             for(int i=0;i<datos.getRowCount();i++){
                 String codigo = (String) ventas.jtLinea.getValueAt(i, 0);
@@ -126,8 +155,9 @@ public class PresentadorVentas implements ActionListener, java.awt.event.ItemLis
                 Talle t = new Talle((int) ventas.jtLinea.getValueAt(i, 5),bd.buscarDTalle((int) ventas.jtLinea.getValueAt(i, 5)));
                 ColorP co = new ColorP((int) ventas.jtLinea.getValueAt(i, 6),bd.buscarDColor((int) ventas.jtLinea.getValueAt(i, 6)));
             
-                bd.restaurarStock(codigo,cant,t,co);
+                bd.restaurarStock(codigo,cant,t,co,linea);
             }
+            datos.setRowCount(0);
             for(int i=0;i<datos.getRowCount();i++){
                 datos.removeRow(i);
             }
@@ -137,7 +167,8 @@ public class PresentadorVentas implements ActionListener, java.awt.event.ItemLis
             JOptionPane.showMessageDialog(null, "Venta cancelada");
         }
         if(e.getSource().equals(ventas.btnFinalizarVenta)){
-            
+            limpiar();
+            cardarId(1);       
         }
     }
     
@@ -174,7 +205,7 @@ public class PresentadorVentas implements ActionListener, java.awt.event.ItemLis
         bd.registrarVenta(ve,Integer.parseInt(menu.jlPunto.getText()));
     }   
 
-    void cardarId(int sum) {
+    public void cardarId(int sum) {
         int cod = 1+sum;
         
         Calendar fecha = new GregorianCalendar();
@@ -231,6 +262,19 @@ public class PresentadorVentas implements ActionListener, java.awt.event.ItemLis
                 }
             }
         }
+        if(e.getStateChange()==ItemEvent.SELECTED){
+            if(ventas.cbPago.getSelectedIndex()>-1){
+                if(ventas.cbPago.getSelectedItem().equals("tarjeta")){
+                    ventas.jtfTarjeta.setEnabled(true);
+                    ventas.jtfVto.setEnabled(true);
+                    ventas.jtfCVV.setEnabled(true);
+                }else{
+                    ventas.jtfTarjeta.setEnabled(false);
+                    ventas.jtfVto.setEnabled(false);
+                    ventas.jtfCVV.setEnabled(false);
+                }
+            }
+        }
     }
 
     //limpiar jtf venta
@@ -242,5 +286,6 @@ public class PresentadorVentas implements ActionListener, java.awt.event.ItemLis
         ventas.cbColor.removeAllItems();
         ventas.cbTipo.removeAllItems();
         ventas.cbTalle.removeAllItems();
+        ventas.cbPago.removeAllItems();
     }
 }
